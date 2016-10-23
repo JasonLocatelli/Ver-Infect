@@ -1,5 +1,6 @@
 -- camera 
 require "camera"
+http = require("socket.http")
 
 
 -- Cette ligne permet d'afficher des traces dans la console pendant l'éxécution
@@ -1070,6 +1071,8 @@ end
 
 
 function love.load()
+b, c, h = http.request("http://127.0.0.1/saveData.php/")
+print(b)
 
 fleche = false
 zqsd = true
