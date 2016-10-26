@@ -1,7 +1,8 @@
 -- camera 
 require "camera"
 http = require("socket.http")
-
+require ("ltn12")
+local utf8 = require("utf8")
 
 -- Cette ligne permet d'afficher des traces dans la console pendant l'éxécution
 io.stdout:setvbuf('no')
@@ -134,10 +135,7 @@ balayageHorizontal.sens = 0
 
 
 
--- Pour savoir dans quel niveau est le joueur
-lvlActuel = 0
 
-Niveau = 1
 
 
 -- Affichage ou pas sur l'ecran
@@ -146,13 +144,17 @@ afficheMainMenu = false
 afficheMenu = false
 afficheOptions = false
 afficheSelectVirus = false
+afficheClassement = false
+afficheFin = false
 
 -- FONT
 _fontGame = love.graphics.newFont("fonts/visitor2.ttf",19)
 _fontGame1 = love.graphics.newFont("fonts/visitor2.ttf",10)
 _fontGameDebut = love.graphics.newFont("fonts/visitor2.ttf",100)
 
+
 _fontMenu = love.graphics.newFont("fonts/visitor1.ttf",10)
+
 
 
 -- POUR LE TACTILE
@@ -537,6 +539,65 @@ function ResetGame()
   
 end
 
+function Fin()
+  -- Merci a Jimmy Labodudev pour son aide
+  b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+  afficheOptions = false
+  afficheMainMenu = false
+  afficheMenu = true
+  afficheSelectVirus = false
+  afficheClassement = false
+  afficheFin = true
+  
+  love.audio.stop(lvl1Music)
+  love.audio.stop(lvl2Music)
+  love.audio.stop(lvl3Music)
+  love.audio.stop(lvl4Music)
+  love.audio.stop(lvl5Music)
+  love.graphics.setFont(_fontMenu)
+  
+  camera.y = 0
+  camera.x = 0
+  
+end
+
+function Leaderboard()
+  
+  b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+  afficheOptions = false
+  afficheMainMenu = false
+  afficheMenu = true
+  afficheSelectVirus = false
+  afficheClassement = true
+  afficheFin = false
+  
+  love.audio.stop(MenuMusic)
+  love.audio.play(SelectVirusMusic)
+  
+  menuSelectVirus.selectyourvirus.x = 40
+  menuSelectVirus.selectyourvirus.y = 10
+
+  menuSelectVirus.selectyourvirus.original.x = 92
+  menuSelectVirus.selectyourvirus.original.y = 50
+  
+  menuSelectVirus.selectyourvirus.originalV.x = 57
+  menuSelectVirus.selectyourvirus.originalV.y = 50
+  
+  menuSelectVirus.selectyourvirus.jaune.x = 20
+  menuSelectVirus.selectyourvirus.jaune.y = 50
+  
+  menuSelectVirus.selectyourvirus.rouge.x = 127
+  menuSelectVirus.selectyourvirus.rouge.y = 50
+  
+  menuSelectVirus.selectyourvirus.rose.x = 160
+  menuSelectVirus.selectyourvirus.rose.y = 50
+   
+  love.graphics.setFont(_fontMenu)
+  
+  
+end
+
+
 function SelectVirus()
   timeaffiche = 0
   positioncurseur2 = 3
@@ -550,6 +611,8 @@ function SelectVirus()
   afficheMainMenu = false
   afficheMenu = true
   afficheSelectVirus = true
+  afficheClassement = false
+  afficheFin = false
   
   menuSelectVirus.selectyourvirus.x = 40
   menuSelectVirus.selectyourvirus.y = 10
@@ -606,6 +669,8 @@ function MainMenu()
   afficheMenu = true
   afficheOptions = false
   afficheSelectVirus = false
+  afficheClassement = false
+  afficheFin = false
 
   camera.y = 0
   camera.x = 0
@@ -641,6 +706,7 @@ function OptionsMenu()
   afficheMainMenu = false
   afficheMenu = true
   afficheSelectVirus = false
+  afficheClassement = false
    
   camera.y = 0
   camera.x = 0
@@ -691,6 +757,8 @@ lvl5Music:setVolume(musicVolume)
   afficheMenu = false
   afficheOptions = false
   afficheSelectVirus = false
+  afficheClassement = false
+  afficheFin = false
   
   
   Niveau = 1
@@ -758,7 +826,6 @@ lvl5Music:setVolume(musicVolume)
   
   playerStart = virus.skins.jaune.start
   virus.skins.jaune.power = true
-  lvlActuel = 0
   
   elseif SelectVirusP == "rouge" then
   
@@ -786,31 +853,31 @@ lvl5Music:setVolume(musicVolume)
   map[4]  = { 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[5]  = { 0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[6]  = { 0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[7]  = { 0,0,0,0,0,0,0,1,0,1,0,8,0,0,0,0,0,1,1,1,1,0,0,0,0,0,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[7]  = { 0,0,0,0,0,0,0,1,0,1,0,8,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[8]  = { 0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[9]  = { 0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[9]  = { 0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[10] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[11] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[12] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[13] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[14] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[15] = { 0,0,0,0,0,1,1,1,1,1,0,0,0,1,0,0,1,0,8,8,0,1,1,0,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[16] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[17] = { 0,0,0,0,0,1,0,8,0,0,0,0,0,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,0,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[18] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[19] = { 0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[12] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[13] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[14] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[15] = { 0,0,0,0,0,1,1,1,1,1,0,0,0,1,0,0,1,0,8,8,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[16] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[17] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[18] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[19] = { 0,0,0,0,0,1,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[20] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[21] = { 0,0,0,0,0,1,0,9,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[22] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[23] = { 0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[24] = { 0,0,0,0,0,1,0,0,0,1,1,0,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[25] = { 0,0,0,0,0,1,0,8,0,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[26] = { 0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[27] = { 0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[28] = { 0,0,1,2,2,0,0,0,0,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[29] = { 0,0,1,2,2,0,0,0,0,1,1,1,1,0,0,0,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[30] = { 0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[31] = { 0,0,0,0,0,1,0,0,0,1,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[21] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[22] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[23] = { 0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[24] = { 0,0,0,0,0,1,1,0,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[25] = { 0,0,0,0,0,1,1,0,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[26] = { 0,0,0,0,0,1,1,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[27] = { 0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[28] = { 0,0,1,2,2,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[29] = { 0,0,1,2,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[30] = { 0,0,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[31] = { 0,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[32] = { 0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[33] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[34] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
@@ -859,7 +926,7 @@ function DeuxiemeNiveau()
  
   Niveau = 2
   
-  lvlActuel = 2
+
   
   --camera.y = 0
   --camera.x = 0
@@ -908,7 +975,7 @@ function TroisiemeNiveau()
   Niveau = 3
   
  
-  lvlActuel = 3
+ 
  
   
   -- Coordonnées du Spawn Depart
@@ -953,7 +1020,7 @@ function QuatriemeNiveau()
   Niveau = 4
   
  
-  lvlActuel = 4
+
  
   
   -- Coordonnées du Spawn Depart
@@ -996,7 +1063,7 @@ function CinquiemeNiveau()
   Niveau = 5
   
  
-  lvlActuel = 5
+
  
   
   -- Coordonnées du Spawn Depart
@@ -1040,7 +1107,7 @@ function SixiemeNiveau()
   Niveau = 6
   
  
-  lvlActuel = 6
+ 
  
   
   -- Coordonnées du Spawn Depart
@@ -1071,9 +1138,9 @@ end
 
 
 function love.load()
-b, c, h = http.request("http://127.0.0.1/saveData.php/")
-print(b)
 
+pseudo = ""
+love.keyboard.setKeyRepeat(true)
 fleche = false
 zqsd = true
 wasd = false
@@ -1256,7 +1323,6 @@ if moveControls == "ZQSD" then
 
   MainMenu()
   --SelectVirus()
-
   --PremierNiveau()
   --DeuxiemeNiveau()
   --TroisiemeNiveau()
@@ -1267,8 +1333,7 @@ end
 
 function love.update(dt)
   
-  
-  
+
  
 if tonumber(soundVolume) == 0 then
   
@@ -1416,23 +1481,7 @@ controls.haut.y = camera.y
        
        love.audio.pause(lvl1Music)
       
-    elseif lvlActuel == 2 then
-      
-      love.audio.pause(lvl2Music)
-      
-    elseif lvlActuel == 3 then
-    
-    love.audio.pause(lvl3Music)
-      
-    elseif lvlActuel == 4 then
-      
-      love.audio.pause(lvl4Music)
-      
-    elseif lvlActuel == 5 then
-      
-      love.audio.pause(lvl5Music)
-      
-    end
+   end
     
     
   end
@@ -1442,22 +1491,6 @@ controls.haut.y = camera.y
     if lvlActuel == 1 then
        
        love.audio.resume(lvl1Music)
-      
-    elseif lvlActuel == 2 then
-      
-      love.audio.resume(lvl2Music)
-      
-    elseif lvlActuel == 3 then
-    
-    love.audio.resume(lvl3Music)
-      
-    elseif lvlActuel == 4 then
-      
-      love.audio.resume(lvl4Music)
-      
-     elseif lvlActuel == 5 then
-      
-      love.audio.resume(lvl5Music)
       
     end
     
@@ -1474,7 +1507,7 @@ if gameOver == true then
   
   end
 
-  if afficheMenu == false and afficheMainMenu == false and afficheOptions == false and gameOver == false and afficheSelectVirus == false then 
+  if afficheMenu == false and afficheMainMenu == false and afficheOptions == false and gameOver == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then 
     
     if activeTimer == true then
       
@@ -1811,22 +1844,23 @@ end
   if scanTime < 0.1 then
   
     scanTime = scanTime + 15
-    print(randomNumber)
     
+    print(randomNumber)
+    randomNumber = love.math.random(1, 5)
     if randomNumber == 2 then
     
     balayageVertical.active = true
       print(randomNumber)
     end
   
-  if randomNumber == 3 then
+  if randomNumber == 1 then
     
     balayageHorizontal.active = true
       print(randomNumber)
     
     end
   
-    if Safe == false and randomNumber == 1 then
+    if Safe == false and randomNumber == 3 then
     
       if SelectVirusP == "rose" then
         
@@ -2601,61 +2635,21 @@ end
 
   
   
-  -- COLLISIONS FIN LVL
+  -- COLLISIONS FIN
   
-   if map[nLigneCollisionBas][nColonneCollisionGauche] == 9 then
+  if map[nLigneCollisionBas][nColonneCollisionGauche] == 9 then
     love.audio.play(lvlUp)
-    if lvlActuel == 1 then
-      
-      DeuxiemeNiveau()
-      
-      print("Niveau 2")
-    elseif lvlActuel == 2 then
-      print("Niveau 3")
-      TroisiemeNiveau()
-    elseif lvlActuel == 3 then
-    print("Niveau 4")
-      QuatriemeNiveau()
-    elseif lvlActuel == 4 then
-      print("Niveau 5")
-      CinquiemeNiveau()
-    elseif lvlActuel == 5 then
-      print("Niveau 6")
-      SixiemeNiveau()
-      end
-    
-  
+    Fin()
   end
   
   if map[nLigneCollisionHaut][nColonneCollisionDroite] == 9 then
-    love.audio.play(lvlUp)
-    if lvlActuel == 1 then
-      
-      DeuxiemeNiveau()
-      
-      print("Niveau 2")
-    elseif lvlActuel == 2 then
-      print("Niveau 3")
-      TroisiemeNiveau()
-    elseif lvlActuel == 3 then
-    print("Niveau 4")
-      QuatriemeNiveau()
-    elseif lvlActuel == 4 then
-      print("Niveau 5")
-      CinquiemeNiveau()
-    elseif lvlActuel == 5 then
-      print("Niveau 6")
-      SixiemeNiveau()
-      end
-    
-
-    
+    love.audio.play(lvlUp) 
+    Fin()
   end
 
   
 
   -- PIEGES
-  
   
   end
 
@@ -2772,7 +2766,7 @@ end
         
       end
     
-      if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus == false then
+      if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
       
   
       
@@ -2809,7 +2803,7 @@ end
     
       end
     
-      if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == true then
+      if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == true and afficheClassement == false and afficheFin == false then
         
         timeaffiche = timeaffiche + love.timer.getDelta()
         
@@ -2849,7 +2843,7 @@ end
         
       end
   
-      if afficheMainMenu == false and afficheOptions == true and afficheSelectVirus == false then
+      if afficheMainMenu == false and afficheOptions == true and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
         
     
       --if positionhorizontal == 1 then
@@ -2934,7 +2928,7 @@ function love.draw()
     
     
     
-    if afficheMainMenu == true and afficheMenu == true and afficheOptions == false and afficheSelectVirus == false then
+    if afficheMainMenu == true and afficheMenu == true and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
       
       
       
@@ -2964,7 +2958,9 @@ function love.draw()
      
     end
     
-    if afficheSelectVirus == true and afficheMainMenu == false and afficheMenu == true and afficheOptions == false then
+    
+    -- MENU SELECTION
+    if afficheSelectVirus == true and afficheMainMenu == false and afficheMenu == true and afficheOptions == false and afficheClassement == false and afficheFin == false then
       
       if language == "english" then
       love.graphics.print("Choose your virus", menuSelectVirus.selectyourvirus.x+10,menuSelectVirus.selectyourvirus.y)
@@ -2982,9 +2978,42 @@ function love.draw()
       love.graphics.draw(curseurmenu2.sprite,curseurmenu2.x,curseurmenu2.y)
       
     
+  end
+  
+  -- MENU DU CLASSEMENT
+   if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
+      if language == "english" then 
+        
+      love.graphics.print("Leaderboard",65,10)
+      
+        
+      elseif language == "french" then
+        
+      love.graphics.print("Classement",70,10)
+        
+      end
+      
+      love.graphics.print(b,10,30)
+      
     end
     
-    if afficheOptions == true and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false then
+    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == true    then
+     
+      love.graphics.print(b,10,30)
+      
+      if language == "english" then
+        
+        love.graphics.printf("Your name : "..pseudo, 10, 125, love.graphics.getWidth())
+        love.graphics.print("Your time :   "..string.format("%f",yourTime).."  s", 10, 10)
+        
+      elseif language == "french" then
+        
+        love.graphics.printf("Votre pseudo : "..pseudo, 10, 125, love.graphics.getWidth())
+        love.graphics.print("Votre temps :   "..string.format("%f",yourTime).."  s", 10, 10)
+      end
+    
+    end
+    if afficheOptions == true and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
       
       if language == "english" then
       
@@ -3008,6 +3037,7 @@ function love.draw()
       
       
       end
+    
     
       
     end
@@ -3047,7 +3077,7 @@ function love.draw()
       if language == "english" then
       
       love.graphics.print("PAUSE",camera.x+87, camera.y+55,0,0.5)
-      love.graphics.print("Press [E] for resume",camera.x+63, camera.y+85,0,0.5)
+      love.graphics.print("Press [E] to resume",camera.x+63, camera.y+85,0,0.5)
       
       end
     
@@ -3089,25 +3119,25 @@ function love.draw()
       love.graphics.setColor(0,255,0)
       
       
-      if timer >= tonumber(highscoreS) then
+      --if timer >= tonumber(highscoreS) then
         love.graphics.setColor(0,255,0)
-        love.graphics.print("Time :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
-        love.graphics.print("Best time : "..string.format("%f",highscoreS).."  s",camera.x+50,camera.y+15,0,0.5)
-        love.graphics.print("In LVL "..highLVL,camera.x+75,camera.y+25,0,0.5)
-        love.graphics.print("Lvl "..Niveau,camera.x+5, camera.y+140,0,0.5)
-      else
+        --love.graphics.print("Time :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
+        --love.graphics.print("Your Best time : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
+       -- love.graphics.print("In LVL "..highLVL,camera.x+75,camera.y+25,0,0.5)
+        --love.graphics.print("Lvl "..Niveau,camera.x+5, camera.y+140,0,0.5)
+      --else
         love.graphics.setColor(255,255,255)
         love.graphics.print("Time :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
         love.graphics.setColor(0,255,255)
-        love.graphics.print("Best time : "..string.format("%f",highscoreS).."  s",camera.x+50,camera.y+15,0,0.5)
-        love.graphics.print("In LVL "..highLVL,camera.x+75,camera.y+25,0,0.5)
-        love.graphics.print("Lvl "..Niveau,camera.x+5, camera.y+140,0,0.5)
-      end
+        --love.graphics.print(" Your best time : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
+        --love.graphics.print("In LVL "..highLVL,camera.x+75,camera.y+25,0,0.5)
+        --love.graphics.print("Lvl "..Niveau,camera.x+5, camera.y+140,0,0.5)
+     -- end
       
       love.graphics.setColor(255,255,255)
       
     
-      love.graphics.print("Version Alpha 0.27",camera.x+125, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.27",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
     
@@ -3116,25 +3146,25 @@ function love.draw()
       love.graphics.setColor(0,255,0)
       
       
-      if timer >= tonumber(highscoreS) then
-        love.graphics.setColor(0,255,0)
-        love.graphics.print("Temps :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
-        love.graphics.print("Meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
-        love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
-        love.graphics.print("Niveau "..Niveau,camera.x+10, camera.y+140,0,0.5)
-      else
+      --if timer >= tonumber(highscoreS) then
+        --love.graphics.setColor(0,255,0)
+       -- love.graphics.print("Temps :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
+        --love.graphics.print("Votre meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+30,camera.y+15,0,0.5)
+        --love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
+        --love.graphics.print("Niveau "..Niveau,camera.x+10, camera.y+140,0,0.5)
+      --else
         love.graphics.setColor(255,255,255)
         love.graphics.print("Temps :  "..string.format("%f",timer).." s",camera.x+59, camera.y+5,0,0.5)
         love.graphics.setColor(0,255,255)
-        love.graphics.print("Meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
-        love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
-        love.graphics.print("Niveau "..Niveau,camera.x+10, camera.y+140,0,0.5)
-      end
+        --love.graphics.print("Votre meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+30,camera.y+15,0,0.5)
+        --love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
+        --love.graphics.print("Niveau "..Niveau,camera.x+10, camera.y+140,0,0.5)
+      --end
       
       love.graphics.setColor(255,255,255)
   
       
-      love.graphics.print("Version Alpha 0.27",camera.x+125, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.27",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
   
@@ -3177,28 +3207,28 @@ function love.draw()
       
       if language == "english" then
         love.graphics.setColor(0,255,255)
-        love.graphics.print("Best time : "..string.format("%f",highscoreS).."  s",camera.x+50,camera.y+15,0,0.5)
-        love.graphics.print("In LVL : "..highLVL,camera.x+75,camera.y+25,0,0.5)
+        --love.graphics.print("Best time : "..string.format("%f",highscoreS).."  s",camera.x+50,camera.y+15,0,0.5)
+       -- love.graphics.print("In LVL : "..highLVL,camera.x+75,camera.y+25,0,0.5)
         love.graphics.setColor(200,0,0)
         love.graphics.setColor(0,255,0)
         love.graphics.print("Your time :   "..string.format("%f",yourTime).."  s",camera.x+50, camera.y+55,0,0.5)
-        ChangeInColor("In LVL %2"..Niveau.."%0",camera.x+82, camera.y+65,0,0.5)
+        --ChangeInColor("In LVL %2"..Niveau.."%0",camera.x+82, camera.y+65,0,0.5)
         love.graphics.setColor(200,0,0)
         love.graphics.print("GAME OVER",camera.x+80, camera.y+40,0,0.5)
-        ChangeInColor("Press [ %2ENTER %0] for restart",camera.x+35, camera.y+90,0,0.5)
+        ChangeInColor("Press [ %2ENTER %0] to restart",camera.x+35, camera.y+90,0,0.5)
         love.graphics.setColor(200,0,0)
       end
       
       if language == "french" then
         love.graphics.setColor(0,255,255)
-        love.graphics.print("Meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
-        love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
+       -- love.graphics.print("Meilleur temps : "..string.format("%f",highscoreS).."  s",camera.x+40,camera.y+15,0,0.5)
+        --love.graphics.print("Dans le niveau "..highLVL,camera.x+60,camera.y+25,0,0.5)
         love.graphics.setColor(200,0,0)
         love.graphics.setColor(0,255,0)
         love.graphics.print("Votre temps :   "..string.format("%f",yourTime).."  s",camera.x+40, camera.y+55,0,0.5)
-        ChangeInColor("Dans le Niveau %2"..Niveau.."%0",camera.x+65, camera.y+65,0,0.5)
+       -- ChangeInColor("Dans le Niveau %2"..Niveau.."%0",camera.x+65, camera.y+65,0,0.5)
         love.graphics.setColor(200,0,0)
-        love.graphics.print("Fin de la partie",camera.x+65, camera.y+40,0,0.5)
+        love.graphics.print("FIN DE LA PARTIE",camera.x+65, camera.y+40,0,0.5)
         ChangeInColor("Appuie sur [ %2ENTREE %0] pour recommencer",camera.x+12, camera.y+90,0,0.5)
         love.graphics.setColor(200,0,0)
       end
@@ -3213,6 +3243,16 @@ function love.draw()
   
   
   if activeTimer == true and afficheMenu == false and afficheOptions == false then
+    
+    if SelectVirusP == "jaune" then
+      if language == "english" then
+        love.graphics.setFont(_fontGame)
+       ChangeInColor("%2[ SPACE ] %0to teleport",camera.x+36, camera.y+10,0,0.5)
+    elseif language == "french" then
+      love.graphics.setFont(_fontGame)
+      ChangeInColor("%2[ ESPACE ]%0 pour se teleporter",camera.x+36, camera.y+10,0,0.5)
+      end
+    end
       
       if timerDebut > 1.0 and timerDebut <= 1.5 then
         love.graphics.setFont(_fontGameDebut)
@@ -3246,7 +3286,17 @@ end
 
 
 function love.keypressed(key)
-  
+  if key == "backspace" then
+        -- get the byte offset to the last UTF-8 character in the string.
+        local byteoffset = utf8.offset(pseudo, -1)
+ 
+        if byteoffset then
+            -- remove the last UTF-8 character.
+            -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
+            pseudo = string.sub(pseudo, 1, byteoffset - 1)
+        end
+    end
+    
   if afficheMenu == true then
     
     
@@ -3256,7 +3306,7 @@ function love.keypressed(key)
 end
 
 -- MENU PRINCIPAL
-if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus == false then
+if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false then
   
   if key == "up" then
       
@@ -3299,6 +3349,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
     if key == "return" then
       
       love.audio.play(select2)
+      Leaderboard()
       
     
     end
@@ -3320,7 +3371,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
  
  
   -- MENU OPTIONS
-  if afficheMainMenu == false and afficheOptions == true and afficheSelectVirus == false then
+  if afficheMainMenu == false and afficheOptions == true and afficheSelectVirus == false and afficheClassement == false then
     
     
     
@@ -3502,8 +3553,53 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
   
  end
  
+ -- CLASSEMENT
+  if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
+     
+     if key == "escape" then
+      MainMenu()
+      love.audio.play(back)
+    end
+     
+  end
+  
+  if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == true then
+     
+    if key == "escape" then
+      ResetGame()
+      PremierNiveau()
+      love.audio.play(back)
+    end
+    
+    if key == "return" then
+      
+      love.audio.play(select3)
+      
+      response_body = {}
+      request_body = "name="..pseudo.."&time="..yourTime
+      socket.http.request {
+
+      -- Merci a Jimmy Labodudev pour son aide
+      url = "http://ver-infect.atspace.cc/saveData.php",
+      method = "POST",
+      headers = {
+	
+        ["Content-Length"] = string.len(request_body),
+        ["Content-Type"] = "application/x-www-form-urlencoded"
+        
+          },
+        source = ltn12.source.string(request_body),
+        sink = ltn12.sink.table(response_body)
+    }
+    table.foreach(response_body,print)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+    
+    end
+     
+  end
+ 
  -- SELECT VIRUS
-  if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == true then
+  if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == true and afficheClassement == false and afficheFin == false then
      
      
      
@@ -3629,7 +3725,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
     
   end
   
-  if afficheMenu == false and afficheMainMenu == false and afficheOptions == false and gameOver == false and afficheSelectVirus == false and activeTimer == false then 
+  if afficheMenu == false and afficheMainMenu == false and afficheOptions == false and gameOver == false and afficheSelectVirus == false and activeTimer == false and afficheClassement == false then 
     
     if moveControls == "ARROW" then
       
@@ -3824,7 +3920,7 @@ end
   end
   
   
-    if key == "lctrl" then
+    if key == "insert" then
     debugmode = true
     
     
@@ -3902,5 +3998,11 @@ function love.keyreleased(key)
   
  
   
+end
+
+function love.textinput(t)
+    if afficheFin == true then
+    pseudo = pseudo .. t
+    end
 end
   
