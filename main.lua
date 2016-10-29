@@ -26,9 +26,8 @@ imgDecor = {}
 imgDecor[0] = love.graphics.newImage("ressources/lvldesign/sol.png")
 imgDecor[1] = love.graphics.newImage("ressources/lvldesign/mur.png")
 imgDecor[2] = love.graphics.newImage("ressources/lvldesign/SafeZoneSansBord.png")
-imgDecor[8] = love.graphics.newImage("ressources/lvldesign/spawn.png")
-imgDecor[9] = love.graphics.newImage("ressources/lvldesign/spawnfin.png")
-imgDecor[3] = love.graphics.newImage("ressources/lvldesign/rechargepower.png")
+imgDecor[3] = love.graphics.newImage("ressources/lvldesign/spawn.png")
+imgDecor[4] = love.graphics.newImage("ressources/lvldesign/spawnfin.png")
 
 imgPrincipal = love.graphics.newImage("ressources/titrePrincipal.png")
 
@@ -185,7 +184,10 @@ controls.gauche.y = camera.y
 controls.droite.x = camera.x
 controls.droite.y = camera.y
 
-
+nameVirus = {}
+nameVirus.x = 0
+nameVirus.y = 0
+nameVirus.name = ""
 
 typeControls = ""
 
@@ -525,10 +527,7 @@ function ResetGame()
   pause = false
   keyPause = 0
   love.audio.stop(lvl1Music)
-  love.audio.stop(lvl2Music)
-  love.audio.stop(lvl3Music)
-  love.audio.stop(lvl4Music)
-  love.audio.stop(lvl5Music)
+
   
   player.speed = 81
 
@@ -550,10 +549,8 @@ function Fin()
   afficheFin = true
   
   love.audio.stop(lvl1Music)
-  love.audio.stop(lvl2Music)
-  love.audio.stop(lvl3Music)
-  love.audio.stop(lvl4Music)
-  love.audio.stop(lvl5Music)
+  love.audio.play(leaderboardMusic)
+  
   love.graphics.setFont(_fontMenu)
   
   camera.y = 0
@@ -562,7 +559,11 @@ function Fin()
 end
 
 function Leaderboard()
-  
+  virusTeleport:setPitch(1)
+  deadSound:setPitch(1)
+  leaderboardMusic:setPitch(1)
+  lvl1Music:setPitch(1)
+
   b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
   afficheOptions = false
   afficheMainMenu = false
@@ -572,7 +573,7 @@ function Leaderboard()
   afficheFin = false
   
   love.audio.stop(MenuMusic)
-  love.audio.play(SelectVirusMusic)
+  love.audio.play(leaderboardMusic)
   
   menuSelectVirus.selectyourvirus.x = 40
   menuSelectVirus.selectyourvirus.y = 10
@@ -599,9 +600,18 @@ end
 
 
 function SelectVirus()
+  
+  virusTeleport:setPitch(1)
+  deadSound:setPitch(1)
+  leaderboardMusic:setPitch(1)
+  lvl1Music:setPitch(1)
+  
   timeaffiche = 0
   positioncurseur2 = 3
   curseurmenu2.y = 65
+    
+  
+   nameVirus.y = 80
 
    love.audio.stop(MenuMusic)
    love.audio.play(SelectVirusMusic)
@@ -641,10 +651,14 @@ end
 
 
 function MainMenu()
-  
-  
+  virusTeleport:setPitch(1)
+  deadSound:setPitch(1)
+  leaderboardMusic:setPitch(1)
+  lvl1Music:setPitch(1)
+  love.audio.stop(leaderboardMusic)
   love.audio.stop(SelectVirusMusic)
   love.audio.play(MenuMusic)
+  
 
 
 
@@ -722,7 +736,7 @@ end
 
 function PremierNiveau()
 
-
+b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
 
 love.audio.stop(MenuMusic)
 love.audio.stop(SelectVirusMusic)
@@ -736,18 +750,13 @@ balayageHorizontal.y = -2
 
   
 lvl1Music:setVolume(musicVolume)
-lvl2Music:setVolume(musicVolume)
-lvl3Music:setVolume(musicVolume)
-lvl4Music:setVolume(musicVolume)
-lvl5Music:setVolume(musicVolume)
+
+
 
 
   
  love.audio.play(lvl1Music)
- love.audio.stop(lvl2Music)
- love.audio.stop(lvl3Music)
- love.audio.stop(lvl4Music)
- love.audio.stop(lvl5Music)
+
  
  --love.audio.stop(lvl6Music)
 
@@ -831,17 +840,23 @@ lvl5Music:setVolume(musicVolume)
   
   playerStart = virus.skins.rouge.start
   player.speed = virus.skins.rouge.speed
-  
+  virusTeleport:setPitch(2)
+  deadSound:setPitch(2)
+  leaderboardMusic:setPitch(2)
+  lvl1Music:setPitch(2)
   elseif SelectVirusP == "originalV" then
   
   playerStart = virus.skins.originalV.start
-  
+  lvl1Music:setPitch(0.5)
+  deadSound:setPitch(0.5)
+  virusTeleport:setPitch(0.5)
+  leaderboardMusic:setPitch(0.5)
   elseif SelectVirusP == "rose" then
   
   playerStart = virus.skins.rose.start
   
   end
-
+  
   player.x = spawn.depart.x
   player.y = spawn.depart.y
   
@@ -849,54 +864,54 @@ lvl5Music:setVolume(musicVolume)
   
   map[1]  = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[2]  = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[3]  = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[4]  = { 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[5]  = { 0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[6]  = { 0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[7]  = { 0,0,0,0,0,0,0,1,0,1,0,8,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[8]  = { 0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[9]  = { 0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[10] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[11] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[12] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[13] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[14] = { 0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[15] = { 0,0,0,0,0,1,1,1,1,1,0,0,0,1,0,0,1,0,8,8,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[16] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[17] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[18] = { 0,0,0,0,0,1,0,0,0,0,2,2,2,1,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[19] = { 0,0,0,0,0,1,0,0,0,1,1,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[20] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[21] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[22] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[23] = { 0,0,0,0,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[24] = { 0,0,0,0,0,1,1,0,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[25] = { 0,0,0,0,0,1,1,0,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[26] = { 0,0,0,0,0,1,1,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[27] = { 0,0,1,1,1,1,1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[28] = { 0,0,1,2,2,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[29] = { 0,0,1,2,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[30] = { 0,0,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[31] = { 0,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[32] = { 0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[33] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[34] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[35] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[36] = { 0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[37] = { 0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[38] = { 0,0,0,0,0,1,0,8,0,1,0,0,0,0,0,0,1,0,9,0,1,0,0,0,0,0,0,0,0,0,8,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[39] = { 0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[40] = { 0,0,0,1,0,1,2,2,2,1,0,1,0,1,2,2,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[41] = { 0,0,0,0,0,1,2,2,2,1,0,0,0,1,2,2,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[42] = { 0,0,0,1,0,1,2,2,2,1,0,1,0,1,0,1,1,1,1,1,1,0,0,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[43] = { 0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[44] = { 0,0,0,1,0,1,0,0,0,1,0,0,0,1,0,1,0,9,0,0,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[45] = { 0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[46] = { 0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[47] = { 0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[48] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[49] = { 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  map[50] = { 0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[3]  = { 0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[4]  = { 0,0,0,0,1,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[5]  = { 0,0,0,0,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[6]  = { 0,0,0,0,1,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[7]  = { 0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[8]  = { 0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[9]  = { 0,0,0,0,1,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[10] = { 0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[11] = { 0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[12] = { 0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[13] = { 0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[14] = { 0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[15] = { 0,0,0,0,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[16] = { 0,0,0,0,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[17] = { 0,0,0,0,1,1,0,0,0,0,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[18] = { 0,0,0,0,1,1,0,0,0,0,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[19] = { 0,0,0,0,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[20] = { 0,0,0,0,1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[21] = { 0,0,0,0,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[22] = { 0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[23] = { 0,0,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[24] = { 0,0,0,0,1,1,1,0,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[25] = { 0,0,0,0,1,1,1,0,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[26] = { 0,1,1,1,1,1,1,0,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[27] = { 0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[28] = { 0,1,1,2,2,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[29] = { 0,1,1,2,2,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[30] = { 0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[31] = { 0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[32] = { 0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[33] = { 0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[34] = { 0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,2,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[35] = { 0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,0,0,0,2,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[36] = { 0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[37] = { 0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[38] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[39] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[40] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[41] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[42] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[43] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[44] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,4,0,0,1,0,0,1,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[45] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[46] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[47] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[48] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[49] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  map[50] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[51] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[52] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[53] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
@@ -906,235 +921,13 @@ lvl5Music:setVolume(musicVolume)
   map[57] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[58] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   map[59] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-  
 
   
  
   
 end
 
-function DeuxiemeNiveau()
-  --randomNumber = love.math.random(1, 3)
-  randomNumber = 3
- love.audio.stop(lvl1Music)
- love.audio.play(lvl2Music)
- love.audio.stop(lvl3Music)
- love.audio.stop(lvl4Music)
- love.audio.stop(lvl5Music)
 
- --love.audio.stop(lvl6Music)
- 
-  Niveau = 2
-  
-
-  
-  --camera.y = 0
-  --camera.x = 0
-  
-  
-  -- Coordonnées du Spawn Depart
-  caseDepartX = 7
-  caseDepartY = 16
-  
-  
-  -- Coordonnées du Spawn Finish
-  --caseFinX = 30
-  --caseFinY = 16
-  
-  
-  -- Met en place les spawn 
-  spawn.depart.x = caseDepartX*16
-  spawn.depart.y = caseDepartY*16
-  
-  --spawn.fin.x = caseFinX*16
-  --spawn.fin.y = caseFinY*16
-  
-  
- 
-  
-  -- Met en place les coordonnées du joueur au spawn Depart 
-  player.x = spawn.depart.x
-  player.y = spawn.depart.y
-  
-  
-  
-end
-
-function TroisiemeNiveau()
-  
-  randomNumber = 2
- 
- love.audio.stop(lvl1Music)
- love.audio.stop(lvl2Music)
- love.audio.play(lvl3Music)
- love.audio.stop(lvl4Music)
- love.audio.stop(lvl5Music)
-
- --love.audio.stop(lvl6Music)
-
-  Niveau = 3
-  
- 
- 
- 
-  
-  -- Coordonnées du Spawn Depart
-  caseDepartX = 18.5
-  caseDepartY = 14
-  
-  -- Coordonnées du Spawn Finish
-  caseFinX = 7
-  caseFinY = 20
-  
-  -- Met en place les spawn 
-  spawn.depart.x = caseDepartX*16
-  spawn.depart.y = caseDepartY*16
-  
-  spawn.fin.x = caseFinX*16
-  spawn.fin.y = caseFinY*16
-  
-
-
-  
-  
-  -- Met en place les coordonnées du joueur au spawn Depart 
-  playerStart = player.sprite
-  player.x = spawn.depart.x
-  player.y = spawn.depart.y
-
-  
-end
-
-function QuatriemeNiveau()
-  --randomNumber = love.math.random(1, 3)
-  
-  randomNumber = 1
- love.audio.stop(lvl1Music)
- love.audio.stop(lvl2Music)
- love.audio.stop(lvl3Music)
- love.audio.play(lvl4Music)
- love.audio.stop(lvl5Music)
- --love.audio.stop(lvl6Music)
-  
-  
-  Niveau = 4
-  
- 
-
- 
-  
-  -- Coordonnées du Spawn Depart
-  caseDepartX = 7
-  caseDepartY = 24
-  
-  -- Coordonnées du Spawn Finish
-  --caseFinX = 10
-  --caseFinY = 20
-  
-  -- Met en place les spawn 
-  spawn.depart.x = caseDepartX*16
-  spawn.depart.y = caseDepartY*16
-  
-  --spawn.fin.x = caseFinX*16
-  --spawn.fin.y = caseFinY*16
-  
-
-
-  
-  
-  -- Met en place les coordonnées du joueur au spawn Depart 
-  player.x = spawn.depart.x
-  player.y = spawn.depart.y
-
-  
-end
-
-function CinquiemeNiveau()
- --randomNumber = love.math.random(1, 3)
- randomNumber = 3
- love.audio.stop(lvl1Music)
- love.audio.stop(lvl2Music)
- love.audio.stop(lvl3Music)
- love.audio.stop(lvl4Music)
- love.audio.play(lvl5Music)
-
-  
-  
-  Niveau = 5
-  
- 
-
- 
-  
-  -- Coordonnées du Spawn Depart
-  caseDepartX = 7
-  caseDepartY = 37
-  
-  -- Coordonnées du Spawn Finish
-  --caseFinX = 10
-  --caseFinY = 20
-  
-  -- Met en place les spawn 
-  spawn.depart.x = caseDepartX*16
-  spawn.depart.y = caseDepartY*16
-  
- -- spawn.fin.x = caseFinX*16
-  --spawn.fin.y = caseFinY*16
-  
-
-
-  
-  
-  -- Met en place les coordonnées du joueur au spawn Depart 
-  playerStart = player.sprite
-  player.x = spawn.depart.x
-  player.y = spawn.depart.y
-
-  
-end
-
-function SixiemeNiveau()
- --randomNumber = love.math.random(1, 3)
- randomNumber = 2
- love.audio.stop(lvl1Music)
- love.audio.stop(lvl2Music)
- love.audio.stop(lvl3Music)
- love.audio.stop(lvl4Music)
- love.audio.play(lvl5Music)
-
-  
-  
-  Niveau = 6
-  
- 
- 
- 
-  
-  -- Coordonnées du Spawn Depart
-  caseDepartX = 30
-  caseDepartY = 37
-  
-  -- Coordonnées du Spawn Finish
-  --caseFinX = 10
-  --caseFinY = 20
-  
-  -- Met en place les spawn 
-  spawn.depart.x = caseDepartX*16
-  spawn.depart.y = caseDepartY*16
-  
- -- spawn.fin.x = caseFinX*16
-  --spawn.fin.y = caseFinY*16
-  
-
-
-  
-  
-  -- Met en place les coordonnées du joueur au spawn Depart 
-  player.x = spawn.depart.x
-  player.y = spawn.depart.y
-
-  
-end
 
 
 function love.load()
@@ -1169,10 +962,6 @@ print(filedirectory)
     love.filesystem.write("language.lua","language\n=\nenglish")
   end
 
-  if not love.filesystem.exists("scores.lua") then
-    love.filesystem.newFile("scores.lua")
-    love.filesystem.write("scores.lua","highscore\n=\n0\n0")
-  end
 
  if not love.filesystem.exists("controls.lua") then
     love.filesystem.newFile("controls.lua")
@@ -1205,19 +994,19 @@ print(filedirectory)
   moveControls = controlsSystem[3]
   
   
-  for lines in love.filesystem.lines("scores.lua") do
-    table.insert(highscoresS,lines)
+  --for lines in love.filesystem.lines("scores.lua") do
+   -- table.insert(highscoresS,lines)
     
-  end
+  --end
   
-   highscoreS = highscoresS[4]
+   --highscoreS = highscoresS[4]
    
-  for lines in love.filesystem.lines("scores.lua") do
-    table.insert(LVL,lines)
+  --for lines in love.filesystem.lines("scores.lua") do
+   -- table.insert(LVL,lines)
     
-  end
+  --end
   
-   highLVL = LVL[3]
+   --highLVL = LVL[3]
    
    
   for lines in love.filesystem.lines("sound.lua") do
@@ -1237,7 +1026,7 @@ print(filedirectory)
   
   print("MusicVolume : "..musicVolume)
   
-  print("Meilleur temps : "..highscoreS.." s  dans le niveau "..highLVL)
+  --print("Meilleur temps : "..highscoreS.." s  dans le niveau "..highLVL)
 
   
   print("Le jeu est en : "..language)
@@ -1275,17 +1064,9 @@ if moveControls == "ZQSD" then
   lvl1Music = love.audio.newSource("musics/lvl1.ogg", "stream")
   lvl1Music:setLooping(true)
   
-  lvl2Music = love.audio.newSource("musics/lvl2.ogg", "stream")
-  lvl2Music:setLooping(true)
+  leaderboardMusic = love.audio.newSource("musics/leaderboard1.wav", "stream")
+  leaderboardMusic:setLooping(true)
   
-  lvl3Music = love.audio.newSource("musics/lvl3.ogg", "stream")
-  lvl3Music:setLooping(true)
-  
-  lvl4Music = love.audio.newSource("musics/lvl4.ogg", "stream")
-  lvl4Music:setLooping(true)
-  
-  lvl5Music = love.audio.newSource("musics/lvl5.ogg", "stream")
-  lvl5Music:setLooping(true)
   
   MenuMusic = love.audio.newSource("musics/menu.ogg", "stream")
   MenuMusic:setLooping(true)
@@ -1362,6 +1143,7 @@ if tonumber(soundVolume) == 0 then
     
     musicVolume = 0
     
+  
   end
   
 
@@ -1500,10 +1282,9 @@ controls.haut.y = camera.y
 
 if gameOver == true then
   love.audio.stop(lvl1Music)
-  love.audio.stop(lvl2Music)
-  love.audio.stop(lvl3Music)
-  love.audio.stop(lvl4Music)
-  love.audio.stop(lvl5Music)
+  if SelectVirusP == "originalV" then
+  deadSound:setPitch(0.5)
+ end
   
   end
 
@@ -1638,25 +1419,25 @@ if balayageVertical.active == true and balayageVertical.sens == 2 then
   
   end
   
-   if scoresS > tonumber(highscoreS) then
+   --if scoresS > tonumber(highscoreS) then
     
-    highscoreS = scoresS
+    --highscoreS = scoresS
     
    
     --love.filesystem.write("scores.lua","highscore\n=\n\n" ..highscoreS)
      
     
-  end
+  --end
   
-     if Niveau > tonumber(highLVL) then
+     --if Niveau > tonumber(highLVL) then
     
-    highLVL = Niveau
+    --highLVL = Niveau
     
     --love.filesystem.write("scores.lua","highscore\n=\n\n" ..highscoreS)
   
      
     
-  end
+ -- end
   
   
   
@@ -1686,17 +1467,17 @@ if balayageVertical.active == true and balayageVertical.sens == 2 then
     
  -- end
   
-  if ((player.x <= bonus.speed.x+8) and (bonus.speed.x  <= player.x+8) and (player.y <= bonus.speed.y+8) and (bonus.speed.y <= player.y+8)) then
+  --if ((player.x <= bonus.speed.x+8) and (bonus.speed.x  <= player.x+8) and (player.y <= bonus.speed.y+8) and (bonus.speed.y <= player.y+8)) then
      
     
-    player.speed = player.speed + 5
-    bonus.speed.x = 0
-    love.audio.play(takeSpeed)
-    table.remove(bonus["speed"])
-    print("Collision avec le bonus <Speed>")
+    --player.speed = player.speed + 5
+    --bonus.speed.x = 0
+    --love.audio.play(takeSpeed)
+    --table.remove(bonus["speed"])
+    --print("Collision avec le bonus <Speed>")
   
     
-  end
+  --end
   
 
   -- VERTICAL
@@ -1827,10 +1608,7 @@ end
     
   
    love.audio.stop(lvl1Music)
-   love.audio.stop(lvl2Music)
-   love.audio.stop(lvl3Music)
-   love.audio.stop(lvl4Music)
-   love.audio.stop(lvl5Music)
+  
   -- love.audio.stop(lvl6Music)
     
     
@@ -2637,12 +2415,12 @@ end
   
   -- COLLISIONS FIN
   
-  if map[nLigneCollisionBas][nColonneCollisionGauche] == 9 then
+  if map[nLigneCollisionBas][nColonneCollisionGauche] == 4 then
     love.audio.play(lvlUp)
     Fin()
   end
   
-  if map[nLigneCollisionHaut][nColonneCollisionDroite] == 9 then
+  if map[nLigneCollisionHaut][nColonneCollisionDroite] == 4 then
     love.audio.play(lvlUp) 
     Fin()
   end
@@ -2666,10 +2444,8 @@ end
   virusTeleport:setVolume(soundVolume)
   
   lvl1Music:setVolume(musicVolume)
-  lvl2Music:setVolume(musicVolume)
-  lvl3Music:setVolume(musicVolume)
-  lvl4Music:setVolume(musicVolume)
-  lvl5Music:setVolume(musicVolume)
+  leaderboardMusic:setVolume(musicVolume)
+ 
   MenuMusic:setVolume(musicVolume)
   SelectVirusMusic:setVolume(musicVolume)
 
@@ -2804,28 +2580,34 @@ end
       end
     
       if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == true and afficheClassement == false and afficheFin == false then
-        
+        nameVirus.x =  curseurmenu2.x
         timeaffiche = timeaffiche + love.timer.getDelta()
         
         if positioncurseur2 == 1 then
           
           curseurmenu2.x = menuSelectVirus.selectyourvirus.jaune.x
+          nameVirus.name = "VI-TLP"
+          
           
         elseif positioncurseur2 == 2 then
           
           curseurmenu2.x = menuSelectVirus.selectyourvirus.originalV.x
+          nameVirus.name = "VI-NigirO"
           
         elseif positioncurseur2 == 3 then
           
           curseurmenu2.x = menuSelectVirus.selectyourvirus.original.x
+          nameVirus.name = "VI-Origin"
           
         elseif positioncurseur2 == 4 then
           
           curseurmenu2.x = menuSelectVirus.selectyourvirus.rouge.x
+          nameVirus.name = "VI-RageL"
           
         elseif positioncurseur2 == 5 then
           
           curseurmenu2.x = menuSelectVirus.selectyourvirus.rose.x
+          nameVirus.name = "VI-NooBik"
           
         end
           
@@ -2942,7 +2724,7 @@ function love.draw()
         love.graphics.print("Leaderboard",  menu.leaderboard.x,  menu.leaderboard.y)
         love.graphics.print("Quit",  menu.quit.x,  menu.quit.y)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y)
-        love.graphics.print("Version Alpha 0.27", 95,140)
+        love.graphics.print("Version Alpha 0.30", 95,140)
       
       elseif language == "french" then
       
@@ -2952,7 +2734,7 @@ function love.draw()
         love.graphics.print("Classement",  menu.leaderboard.x,  menu.leaderboard.y)
         love.graphics.print("Quitter",  menu.quit.x,  menu.quit.y)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y)
-        love.graphics.print("Version Alpha 0.27", 95,140)
+        love.graphics.print("Version Alpha 0.30", 95,140)
         
       end
      
@@ -2968,7 +2750,9 @@ function love.draw()
     
       if language == "french" then
       love.graphics.print("Choisissez votre virus", menuSelectVirus.selectyourvirus.x,menuSelectVirus.selectyourvirus.y)
-      end
+    end
+    
+      love.graphics.print(nameVirus.name,nameVirus.x-12,nameVirus.y)
     
       love.graphics.draw(menuSelectVirus.selectyourvirus.original.sprite,menuSelectVirus.selectyourvirus.original.x,menuSelectVirus.selectyourvirus.original.y)
       love.graphics.draw(menuSelectVirus.selectyourvirus.originalV.sprite,menuSelectVirus.selectyourvirus.originalV.x,menuSelectVirus.selectyourvirus.originalV.y)
@@ -2982,14 +2766,18 @@ function love.draw()
   
   -- MENU DU CLASSEMENT
    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
+     
       if language == "english" then 
         
+      love.graphics.setColor(0,255,0)
       love.graphics.print("Leaderboard",65,10)
-      
+      love.graphics.setColor(255,255,255)
         
       elseif language == "french" then
         
+      love.graphics.setColor(0,255,0)
       love.graphics.print("Classement",70,10)
+      love.graphics.setColor(255,255,255)
         
       end
       
@@ -2997,18 +2785,23 @@ function love.draw()
       
     end
     
-    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == true    then
+    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == true then
+      love.graphics.setColor(255,255,255)
      
       love.graphics.print(b,10,30)
       
       if language == "english" then
         
+        love.graphics.setColor(0,255,0)
         love.graphics.printf("Your name : "..pseudo, 10, 125, love.graphics.getWidth())
+        love.graphics.setColor(255,255,255)
         love.graphics.print("Your time :   "..string.format("%f",yourTime).."  s", 10, 10)
         
       elseif language == "french" then
         
+        love.graphics.setColor(0,255,0)
         love.graphics.printf("Votre pseudo : "..pseudo, 10, 125, love.graphics.getWidth())
+        love.graphics.setColor(255,255,255)
         love.graphics.print("Votre temps :   "..string.format("%f",yourTime).."  s", 10, 10)
       end
     
@@ -3094,7 +2887,7 @@ function love.draw()
    
     love.graphics.draw(spawn.depart.sprite, spawn.depart.x, spawn.depart.y)
     love.graphics.draw(spawn.fin.sprite, spawn.fin.x, spawn.fin.y)
-    love.graphics.draw(bonus.speed.sprite, bonus.speed.x , bonus.speed.y)
+    --love.graphics.draw(bonus.speed.sprite, bonus.speed.x , bonus.speed.y)
     
     love.graphics.draw(playerStart, player.x, player.y)
     love.graphics.draw(IA.sprite, IA.x, IA.y)
@@ -3137,7 +2930,7 @@ function love.draw()
       love.graphics.setColor(255,255,255)
       
     
-      love.graphics.print("Version Alpha 0.27",camera.x+60, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.30",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
     
@@ -3164,7 +2957,7 @@ function love.draw()
       love.graphics.setColor(255,255,255)
   
       
-      love.graphics.print("Version Alpha 0.27",camera.x+60, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.30",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
   
@@ -3247,7 +3040,7 @@ function love.draw()
     if SelectVirusP == "jaune" then
       if language == "english" then
         love.graphics.setFont(_fontGame)
-       ChangeInColor("%2[ SPACE ] %0to teleport",camera.x+36, camera.y+10,0,0.5)
+       ChangeInColor("%2[ SPACE ] %0to teleport",camera.x+50, camera.y+10,0,0.5)
     elseif language == "french" then
       love.graphics.setFont(_fontGame)
       ChangeInColor("%2[ ESPACE ]%0 pour se teleporter",camera.x+36, camera.y+10,0,0.5)
@@ -3593,6 +3386,8 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
     }
     table.foreach(response_body,print)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+    MainMenu()
+    
     
     end
      
@@ -3707,10 +3502,8 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
       love.audio.play(back)
       MainMenu()
       love.audio.stop(lvl1Music)
-      love.audio.stop(lvl2Music)
-      love.audio.stop(lvl3Music)
-      love.audio.stop(lvl4Music)
-      love.audio.stop(lvl5Music)
+      
+      
       
       end
     
@@ -3865,66 +3658,12 @@ end
 
 
   
-  if debugmode == true then
-    
-    if key == "kp0" then
-      if gameOver == false then
-        MainMenu()
-      end
-    end
-    
-    if key == "kp1" then
-      if gameOver == false then
-        PremierNiveau()
-        timer = 0
-      end
-    end
-    
-    if key == "kp2" then
-      if gameOver == false then
-        DeuxiemeNiveau()
-        timer = 0
-      end
-    end
-    
-    if key == "kp3" then
-      if gameOver == false then
-        TroisiemeNiveau()
-        timer = 0
-      end
-    end
-    
-    if key == "kp4" then
-      if gameOver == false then
-        QuatriemeNiveau()
-        timer = 0
-      end
-    end
-    
-    if key == "kp5" then
-      if gameOver == false then
-        CinquiemeNiveau()
-        timer = 0
-      end
-    end
-    
-    
-   if key == "kp6" then
-      if gameOver == false then
-        SixiemeNiveau()
-        timer = 0
-      end
-    end
-  end
+  
   
   end
   
   
-    if key == "insert" then
-    debugmode = true
-    
-    
-    end
+   
   
 
     
@@ -3987,7 +3726,7 @@ function love.quit()
   
   love.filesystem.write("language.lua","language\n=\n" ..language)
   love.filesystem.write("controls.lua","controls\n=\n" ..moveControls)
-  love.filesystem.write("scores.lua","highscore\n=\n"..highLVL.."\n" ..highscoreS)
+  --love.filesystem.write("scores.lua","highscore\n=\n"..highLVL.."\n" ..highscoreS)
   love.filesystem.write("sound.lua","soundVolume\n=\n"..soundVolume .."\n\nmusicVolume\n=\n"..musicVolume)
   
  
