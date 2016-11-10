@@ -360,6 +360,8 @@ positioncurseur = 1
 positionhorizontal = 1
 positionhorizontal2 = 1
 positionhorizontal3 = 1
+positionhorizontalClassement = 1
+NomClassement = ""
 positioncurseur2 = 1
 soundVolumeDisplay = 0
 musicVolumeDisplay = 0
@@ -539,8 +541,31 @@ function ResetGame()
 end
 
 function Fin()
+  love.audio.play(leaderboardMusic)
+  love.audio.play(leaderboardMusic_rose)
   -- Merci a Jimmy Labodudev pour son aide
-  b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+  if SelectVirusP == "original" then 
+    love.audio.stop(leaderboardMusic_rose)
+    love.audio.play(leaderboardMusic)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
+  elseif SelectVirusP == "originalV" then
+    love.audio.stop(leaderboardMusic_rose)
+    love.audio.play(leaderboardMusic)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData_originalV.php")
+    love.audio.play(leaderboardMusic)
+  elseif SelectVirusP == "rouge" then
+    love.audio.play(leaderboardMusic_rose)
+    love.audio.stop(leaderboardMusic)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData_rouge.php")
+  elseif SelectVirusP == "rose" then
+    love.audio.play(leaderboardMusic_rose)
+    love.audio.stop(leaderboardMusic)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData_rose.php")
+  elseif SelectVirusP == "jaune" then
+    love.audio.stop(leaderboardMusic_rose)
+    love.audio.play(leaderboardMusic)
+    b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
+  end
   afficheOptions = false
   afficheMainMenu = false
   afficheMenu = true
@@ -559,12 +584,44 @@ function Fin()
 end
 
 function Leaderboard()
-  virusTeleport:setPitch(1)
-  deadSound:setPitch(1)
-  leaderboardMusic:setPitch(1)
-  lvl1Music:setPitch(1)
+  
 
-  b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+      if positionhorizontalClassement == 1 then
+        love.audio.play(leaderboardMusic)
+        leaderboardMusic:setPitch(1)
+        love.audio.pause(leaderboardMusic_rose)
+        NomClassement = "Origin"
+        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+          
+      elseif positionhorizontalClassement == 2 then
+        love.audio.play(leaderboardMusic)
+        leaderboardMusic:setPitch(0.5)
+        love.audio.pause(leaderboardMusic_rose)
+        NomClassement = "Nigiro"
+        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+    
+      elseif positionhorizontalClassement == 3 then
+        love.audio.play(leaderboardMusic)
+       
+        leaderboardMusic:setPitch(2)
+        NomClassement = "Ragel"
+        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+    
+      elseif positionhorizontalClassement == 4 then
+      
+        love.audio.play(leaderboardMusic_rose)
+        NomClassement = "Noobik"
+        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+      
+      elseif positionhorizontalClassement == 5 then
+        love.audio.play(leaderboardMusic)
+        leaderboardMusic:setPitch(1.5)
+        NomClassement = "TLP"
+        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+      
+      end
+  
+  
   afficheOptions = false
   afficheMainMenu = false
   afficheMenu = true
@@ -573,7 +630,8 @@ function Leaderboard()
   afficheFin = false
   
   love.audio.stop(MenuMusic)
-  love.audio.play(leaderboardMusic)
+
+  
   
   menuSelectVirus.selectyourvirus.x = 40
   menuSelectVirus.selectyourvirus.y = 10
@@ -656,6 +714,7 @@ function MainMenu()
   leaderboardMusic:setPitch(1)
   lvl1Music:setPitch(1)
   love.audio.stop(leaderboardMusic)
+  love.audio.stop(leaderboardMusic_rose)
   love.audio.stop(SelectVirusMusic)
   love.audio.play(MenuMusic)
   
@@ -736,7 +795,6 @@ end
 
 function PremierNiveau()
 
-b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
 
 love.audio.stop(MenuMusic)
 love.audio.stop(SelectVirusMusic)
@@ -835,7 +893,7 @@ lvl1Music:setVolume(musicVolume)
   
   playerStart = virus.skins.jaune.start
   virus.skins.jaune.power = true
-  
+  leaderboardMusic:setPitch(1.5)
   elseif SelectVirusP == "rouge" then
   
   playerStart = virus.skins.rouge.start
@@ -844,6 +902,7 @@ lvl1Music:setVolume(musicVolume)
   deadSound:setPitch(2)
   leaderboardMusic:setPitch(2)
   lvl1Music:setPitch(2)
+  
   elseif SelectVirusP == "originalV" then
   
   playerStart = virus.skins.originalV.start
@@ -851,10 +910,11 @@ lvl1Music:setVolume(musicVolume)
   deadSound:setPitch(0.5)
   virusTeleport:setPitch(0.5)
   leaderboardMusic:setPitch(0.5)
+  
   elseif SelectVirusP == "rose" then
   
   playerStart = virus.skins.rose.start
-  
+  leaderboardMusic:setPitch(0.9)
   end
   
   player.x = spawn.depart.x
@@ -1066,6 +1126,9 @@ if moveControls == "ZQSD" then
   
   leaderboardMusic = love.audio.newSource("musics/leaderboard1.wav", "stream")
   leaderboardMusic:setLooping(true)
+  
+  leaderboardMusic_rose = love.audio.newSource("musics/leaderboard_rose.wav", "stream")
+  leaderboardMusic_rose:setLooping(true)
   
   
   MenuMusic = love.audio.newSource("musics/menu.ogg", "stream")
@@ -2445,7 +2508,8 @@ end
   
   lvl1Music:setVolume(musicVolume)
   leaderboardMusic:setVolume(musicVolume)
- 
+  leaderboardMusic_rose:setVolume(musicVolume)
+  
   MenuMusic:setVolume(musicVolume)
   SelectVirusMusic:setVolume(musicVolume)
 
@@ -2624,6 +2688,43 @@ end
         end
         
       end
+      
+      if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
+      
+       if positionhorizontalClassement == 1 then
+         leaderboardMusic:setPitch(1)
+          NomClassement = "Origin"
+          --b, c, h = http.request("http://127.0.0.1/getData_original.php")
+    
+      elseif positionhorizontalClassement == 2 then
+        leaderboardMusic:setPitch(0.5)
+          NomClassement = "Nigiro"
+          --b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+    
+    elseif positionhorizontalClassement == 3 then
+      
+        leaderboardMusic:setPitch(2)
+          NomClassement = "Ragel"
+         -- b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+    
+      elseif positionhorizontalClassement == 4 then
+      
+          NomClassement = "Noobik"
+          --b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+      
+      elseif positionhorizontalClassement == 5 then
+        leaderboardMusic:setPitch(1.5)
+          NomClassement = "TLP"
+          --b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+      
+      end
+      
+      if positionhorizontalClassement == 6 then
+        positionhorizontalClassement = 1
+      elseif positionhorizontalClassement == 0 then
+        positionhorizontalClassement = 5
+        end
+      end
   
       if afficheMainMenu == false and afficheOptions == true and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
         
@@ -2766,18 +2867,18 @@ function love.draw()
   
   -- MENU DU CLASSEMENT
    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
-     
       if language == "english" then 
         
-      love.graphics.setColor(0,255,0)
-      love.graphics.print("Leaderboard",65,10)
-      love.graphics.setColor(255,255,255)
+     
+      ChangeColor("< %2Leaderboard%0 "..NomClassement.." >", 39,10)
+      --love.graphics.print("Leaderboard "..NomClassement,50,10)
         
       elseif language == "french" then
         
-      love.graphics.setColor(0,255,0)
-      love.graphics.print("Classement",70,10)
-      love.graphics.setColor(255,255,255)
+     
+      ChangeColor("< %2Classement%0 "..NomClassement.." >", 39,10)
+      --love.graphics.print("Classement "..NomClassement,50,10)
+     
         
       end
       
@@ -3354,6 +3455,86 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
       love.audio.play(back)
     end
      
+     if key == "right" then
+       
+       positionhorizontalClassement = positionhorizontalClassement + 1
+      love.audio.play(select3)
+      
+      if positionhorizontalClassement == 1 then 
+        
+        
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+         
+      elseif positionhorizontalClassement == 2 then
+        
+        
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+      
+      elseif positionhorizontalClassement == 3 then
+        
+        love.audio.stop(leaderboardMusic_rose)
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+      
+      elseif positionhorizontalClassement == 4 then
+        
+        love.audio.play(leaderboardMusic_rose)
+        love.audio.stop(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+      
+      elseif positionhorizontalClassement == 5 then
+        
+        love.audio.stop(leaderboardMusic_rose)
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+      end
+      
+    
+      
+    end
+    
+    if key == "left" then
+      
+      positionhorizontalClassement = positionhorizontalClassement - 1
+      love.audio.play(select3)
+      
+      if positionhorizontalClassement == 1 then 
+        
+        
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+         
+      elseif positionhorizontalClassement == 2 then
+        
+        
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+      
+      elseif positionhorizontalClassement == 3 then
+        
+        love.audio.stop(leaderboardMusic_rose)
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+      
+      elseif positionhorizontalClassement == 4 then
+        
+        love.audio.play(leaderboardMusic_rose)
+        love.audio.stop(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+      
+      elseif positionhorizontalClassement == 5 then
+        
+        love.audio.stop(leaderboardMusic_rose)
+        love.audio.play(leaderboardMusic)
+        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+      end
+      
+      
+      
+    end
+    
   end
   
   if afficheMainMenu == false and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == true then
@@ -3368,24 +3549,108 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
       
       love.audio.play(select3)
       
-      response_body = {}
-      request_body = "name="..pseudo.."&time="..yourTime
-      socket.http.request {
+      if SelectVirusP == "original" then 
+      
+        response_body = {}
+        request_body = "name="..pseudo.."&time="..yourTime
+        socket.http.request {
 
-      -- Merci a Jimmy Labodudev pour son aide
-      url = "http://ver-infect.atspace.cc/saveData.php",
-      method = "POST",
-      headers = {
-	
-        ["Content-Length"] = string.len(request_body),
-        ["Content-Type"] = "application/x-www-form-urlencoded"
-        
-          },
-        source = ltn12.source.string(request_body),
-        sink = ltn12.sink.table(response_body)
-    }
-    table.foreach(response_body,print)
-    b, c, h = http.request("http://ver-infect.atspace.cc/getData.php")
+        -- Merci a Jimmy Labodudev pour son aide
+        url = "http://ver-infect.atspace.cc/saveData_original.php",
+        method = "POST",
+        headers = {
+    
+          ["Content-Length"] = string.len(request_body),
+          ["Content-Type"] = "application/x-www-form-urlencoded"
+          
+            },
+          source = ltn12.source.string(request_body),
+          sink = ltn12.sink.table(response_body)
+      }
+      table.foreach(response_body,print)
+      
+    elseif SelectVirusP == "originalV" then 
+      
+        response_body = {}
+        request_body = "name="..pseudo.."&time="..yourTime
+        socket.http.request {
+
+        -- Merci a Jimmy Labodudev pour son aide
+        url = "http://ver-infect.atspace.cc/saveData_originalV.php",
+        method = "POST",
+        headers = {
+      
+          ["Content-Length"] = string.len(request_body),
+          ["Content-Type"] = "application/x-www-form-urlencoded"
+            
+            },
+          source = ltn12.source.string(request_body),
+          sink = ltn12.sink.table(response_body)
+        }
+      table.foreach(response_body,print)
+  
+    elseif SelectVirusP == "rouge" then 
+      
+        response_body = {}
+        request_body = "name="..pseudo.."&time="..yourTime
+        socket.http.request {
+
+        -- Merci a Jimmy Labodudev pour son aide
+        url = "http://ver-infect.atspace.cc/saveData_rouge.php",
+        method = "POST",
+        headers = {
+    
+          ["Content-Length"] = string.len(request_body),
+          ["Content-Type"] = "application/x-www-form-urlencoded"
+          
+            },
+          source = ltn12.source.string(request_body),
+          sink = ltn12.sink.table(response_body)
+      }
+      table.foreach(response_body,print)
+      
+    elseif SelectVirusP == "rose" then 
+      
+        response_body = {}
+        request_body = "name="..pseudo.."&time="..yourTime
+        socket.http.request {
+
+        -- Merci a Jimmy Labodudev pour son aide
+        url = "http://ver-infect.atspace.cc/saveData_rose.php",
+        method = "POST",
+        headers = {
+    
+          ["Content-Length"] = string.len(request_body),
+          ["Content-Type"] = "application/x-www-form-urlencoded"
+          
+            },
+          source = ltn12.source.string(request_body),
+          sink = ltn12.sink.table(response_body)
+      }
+      table.foreach(response_body,print)
+      
+    elseif SelectVirusP == "jaune" then 
+      
+        response_body = {}
+        request_body = "name="..pseudo.."&time="..yourTime
+        socket.http.request {
+
+        -- Merci a Jimmy Labodudev pour son aide
+        url = "http://ver-infect.atspace.cc/saveData_jaune.php",
+        method = "POST",
+        headers = {
+    
+          ["Content-Length"] = string.len(request_body),
+          ["Content-Type"] = "application/x-www-form-urlencoded"
+          
+            },
+          source = ltn12.source.string(request_body),
+          sink = ltn12.sink.table(response_body)
+      }
+      table.foreach(response_body,print)
+    
+  end
+  
     MainMenu()
     
     
@@ -3517,6 +3782,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
      
     
   end
+  
   
   if afficheMenu == false and afficheMainMenu == false and afficheOptions == false and gameOver == false and afficheSelectVirus == false and activeTimer == false and afficheClassement == false then 
     
