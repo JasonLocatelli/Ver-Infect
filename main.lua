@@ -548,20 +548,24 @@ function Fin()
     love.audio.stop(leaderboardMusic_rose)
     love.audio.play(leaderboardMusic)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
-  elseif SelectVirusP == "originalV" then
+  end
+  if SelectVirusP == "originalV" then
     love.audio.stop(leaderboardMusic_rose)
     love.audio.play(leaderboardMusic)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData_originalV.php")
     love.audio.play(leaderboardMusic)
-  elseif SelectVirusP == "rouge" then
-    love.audio.play(leaderboardMusic_rose)
-    love.audio.stop(leaderboardMusic)
+  end
+  if SelectVirusP == "rouge" then
+    love.audio.stop(leaderboardMusic_rose)
+    love.audio.play(leaderboardMusic)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData_rouge.php")
-  elseif SelectVirusP == "rose" then
+  end
+  if SelectVirusP == "rose" then
     love.audio.play(leaderboardMusic_rose)
     love.audio.stop(leaderboardMusic)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData_rose.php")
-  elseif SelectVirusP == "jaune" then
+  end
+  if SelectVirusP == "jaune" then
     love.audio.stop(leaderboardMusic_rose)
     love.audio.play(leaderboardMusic)
     b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
@@ -574,7 +578,7 @@ function Fin()
   afficheFin = true
   
   love.audio.stop(lvl1Music)
-  love.audio.play(leaderboardMusic)
+  
   
   love.graphics.setFont(_fontMenu)
   
@@ -591,33 +595,33 @@ function Leaderboard()
         leaderboardMusic:setPitch(1)
         love.audio.pause(leaderboardMusic_rose)
         NomClassement = "Origin"
-        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
           
       elseif positionhorizontalClassement == 2 then
         love.audio.play(leaderboardMusic)
         leaderboardMusic:setPitch(0.5)
         love.audio.pause(leaderboardMusic_rose)
         NomClassement = "Nigiro"
-        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_originalV.php")
     
       elseif positionhorizontalClassement == 3 then
         love.audio.play(leaderboardMusic)
        
         leaderboardMusic:setPitch(2)
         NomClassement = "Ragel"
-        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rouge.php")
     
       elseif positionhorizontalClassement == 4 then
       
         love.audio.play(leaderboardMusic_rose)
         NomClassement = "Noobik"
-        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rose.php")
       
       elseif positionhorizontalClassement == 5 then
         love.audio.play(leaderboardMusic)
         leaderboardMusic:setPitch(1.5)
         NomClassement = "TLP"
-        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
       
       end
   
@@ -794,6 +798,7 @@ end
 
 
 function PremierNiveau()
+  
 
 
 love.audio.stop(MenuMusic)
@@ -813,7 +818,7 @@ lvl1Music:setVolume(musicVolume)
 
 
   
- love.audio.play(lvl1Music)
+ 
 
  
  --love.audio.stop(lvl6Music)
@@ -885,17 +890,23 @@ lvl1Music:setVolume(musicVolume)
 
   -- Met en place les coordonnées du joueur au spawn Depart 
   if SelectVirusP == "original" then
-  
+    
+  imgDecor[1] = love.graphics.newImage("ressources/lvldesign/mur.png")
+  love.audio.play(lvl1Music)
   playerStart = virus.skins.original.start
   
   
-  elseif SelectVirusP == "jaune" then
+elseif SelectVirusP == "jaune" then
   
+  imgDecor[1] = love.graphics.newImage("ressources/lvldesign/mur.png")
+  love.audio.play(lvl1Music)
   playerStart = virus.skins.jaune.start
   virus.skins.jaune.power = true
   leaderboardMusic:setPitch(1.5)
-  elseif SelectVirusP == "rouge" then
+elseif SelectVirusP == "rouge" then
   
+  imgDecor[1] = love.graphics.newImage("ressources/lvldesign/mur.png")
+  love.audio.play(lvl1Music)
   playerStart = virus.skins.rouge.start
   player.speed = virus.skins.rouge.speed
   virusTeleport:setPitch(2)
@@ -903,16 +914,20 @@ lvl1Music:setVolume(musicVolume)
   leaderboardMusic:setPitch(2)
   lvl1Music:setPitch(2)
   
-  elseif SelectVirusP == "originalV" then
+elseif SelectVirusP == "originalV" then
   
+  
+  imgDecor[1] = love.graphics.newImage("ressources/lvldesign/mur.png")
+  love.audio.play(lvl1Music)
   playerStart = virus.skins.originalV.start
   lvl1Music:setPitch(0.5)
   deadSound:setPitch(0.5)
   virusTeleport:setPitch(0.5)
   leaderboardMusic:setPitch(0.5)
   
-  elseif SelectVirusP == "rose" then
-  
+elseif SelectVirusP == "rose" then
+  imgDecor[1] = love.graphics.newImage("ressources/lvldesign/murrose.png")
+  love.audio.play(leaderboardMusic_rose)
   playerStart = virus.skins.rose.start
   leaderboardMusic:setPitch(0.9)
   end
@@ -1120,7 +1135,8 @@ if moveControls == "ZQSD" then
   deadSound = love.audio.newSource("sounds/dead.wav","static")
   lvlUp = love.audio.newSource("sounds/lvlup2.wav","static")
   takeSpeed = love.audio.newSource("sounds/speed.wav","static")
-  
+  input = love.audio.newSource("sounds/input.wav","static")
+  puttime = love.audio.newSource("sounds/puttime.wav","static")
   lvl1Music = love.audio.newSource("musics/lvl1.ogg", "stream")
   lvl1Music:setLooping(true)
   
@@ -2505,6 +2521,8 @@ end
   takeSpeed:setVolume(soundVolume)
   deadSound:setVolume(soundVolume)
   virusTeleport:setVolume(soundVolume)
+  input:setVolume(soundVolume)
+  puttime:setVolume(soundVolume)
   
   lvl1Music:setVolume(musicVolume)
   leaderboardMusic:setVolume(musicVolume)
@@ -2694,34 +2712,36 @@ end
        if positionhorizontalClassement == 1 then
          leaderboardMusic:setPitch(1)
           NomClassement = "Origin"
-          --b, c, h = http.request("http://127.0.0.1/getData_original.php")
+          
     
       elseif positionhorizontalClassement == 2 then
         leaderboardMusic:setPitch(0.5)
           NomClassement = "Nigiro"
-          --b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+          
     
     elseif positionhorizontalClassement == 3 then
       
         leaderboardMusic:setPitch(2)
           NomClassement = "Ragel"
-         -- b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+         
     
       elseif positionhorizontalClassement == 4 then
       
           NomClassement = "Noobik"
-          --b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+         
       
       elseif positionhorizontalClassement == 5 then
         leaderboardMusic:setPitch(1.5)
           NomClassement = "TLP"
-          --b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+          
       
       end
       
       if positionhorizontalClassement == 6 then
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
         positionhorizontalClassement = 1
       elseif positionhorizontalClassement == 0 then
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
         positionhorizontalClassement = 5
         end
       end
@@ -2806,10 +2826,10 @@ end
 
 function love.draw()
     
+    
     camera:set()
     
-    
-    
+   
     
     if afficheMainMenu == true and afficheMenu == true and afficheOptions == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
       
@@ -2825,7 +2845,7 @@ function love.draw()
         love.graphics.print("Leaderboard",  menu.leaderboard.x,  menu.leaderboard.y)
         love.graphics.print("Quit",  menu.quit.x,  menu.quit.y)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y)
-        love.graphics.print("Version Alpha 0.30", 95,140)
+        love.graphics.print("Version Alpha 0.35", 95,140)
       
       elseif language == "french" then
       
@@ -2835,7 +2855,7 @@ function love.draw()
         love.graphics.print("Classement",  menu.leaderboard.x,  menu.leaderboard.y)
         love.graphics.print("Quitter",  menu.quit.x,  menu.quit.y)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y)
-        love.graphics.print("Version Alpha 0.30", 95,140)
+        love.graphics.print("Version Alpha 0.35", 95,140)
         
       end
      
@@ -2869,13 +2889,13 @@ function love.draw()
    if afficheOptions == false and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == true and afficheFin == false then
       if language == "english" then 
         
-     
+     ChangeColor("<--[ %2ESC%0 ] ", 2,2)
       ChangeColor("< %2Leaderboard%0 "..NomClassement.." >", 39,10)
       --love.graphics.print("Leaderboard "..NomClassement,50,10)
         
       elseif language == "french" then
         
-     
+     ChangeColor("<--[ %2ECHAP%0 ] ", 2,2)
       ChangeColor("< %2Classement%0 "..NomClassement.." >", 39,10)
       --love.graphics.print("Classement "..NomClassement,50,10)
      
@@ -2910,7 +2930,8 @@ function love.draw()
     if afficheOptions == true and afficheMenu == true and afficheMainMenu == false and afficheSelectVirus == false and afficheClassement == false and afficheFin == false then
       
       if language == "english" then
-      
+        
+      ChangeColor("<--[ %2ESC%0 ] ", 2,2)
       ChangeColor("SETTINGS", menuOptions.x,menuOptions.y)
       ChangeColor("Language : [ %2"..tradlanguage.."%0 ]", menuOptions.langue.x,menuOptions.langue.y)
       ChangeColor("Controls : [ %2"..tradControls.."%0 ]", menuOptions.controls.x,menuOptions.controls.y) 
@@ -2920,7 +2941,7 @@ function love.draw()
       love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y)
       
       elseif language == "french" then
-      
+      ChangeColor("<--[ %2ECHAP%0 ] ", 2,2)
       love.graphics.print("OPTIONS", menuOptions.x,menuOptions.y)
       ChangeColor("Langue : [ %2"..tradlanguage.."%0 ]", menuOptions.langue.x,menuOptions.langue.y)
       ChangeColor("Controles : [ %2"..tradControls.."%0 ]", menuOptions.controls.x,menuOptions.controls.y) 
@@ -3031,7 +3052,7 @@ function love.draw()
       love.graphics.setColor(255,255,255)
       
     
-      love.graphics.print("Version Alpha 0.30",camera.x+60, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.35",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
     
@@ -3058,7 +3079,7 @@ function love.draw()
       love.graphics.setColor(255,255,255)
   
       
-      love.graphics.print("Version Alpha 0.30",camera.x+60, camera.y+140,0,0.5)
+      love.graphics.print("Version Alpha 0.35",camera.x+60, camera.y+140,0,0.5)
       love.graphics.print("Scan : "..string.format("%i",scanTime),camera.x+5, camera.y+5,0,0.5)
     end
   
@@ -3188,6 +3209,7 @@ function love.keypressed(key)
             -- remove the last UTF-8 character.
             -- string.sub operates on bytes rather than UTF-8 characters, so we couldn't do string.sub(text, 1, -2).
             pseudo = string.sub(pseudo, 1, byteoffset - 1)
+            love.audio.play(back)
         end
     end
     
@@ -3464,31 +3486,31 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
         
         
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
          
       elseif positionhorizontalClassement == 2 then
         
         
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_originalV.php")
       
       elseif positionhorizontalClassement == 3 then
         
         love.audio.stop(leaderboardMusic_rose)
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rouge.php")
       
       elseif positionhorizontalClassement == 4 then
         
         love.audio.play(leaderboardMusic_rose)
         love.audio.stop(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rose.php")
       
       elseif positionhorizontalClassement == 5 then
         
         love.audio.stop(leaderboardMusic_rose)
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
       end
       
     
@@ -3504,31 +3526,31 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
         
         
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_original.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_original.php")
          
       elseif positionhorizontalClassement == 2 then
         
         
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_originalV.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_originalV.php")
       
       elseif positionhorizontalClassement == 3 then
         
         love.audio.stop(leaderboardMusic_rose)
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_rouge.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rouge.php")
       
       elseif positionhorizontalClassement == 4 then
         
         love.audio.play(leaderboardMusic_rose)
         love.audio.stop(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_rose.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_rose.php")
       
       elseif positionhorizontalClassement == 5 then
         
         love.audio.stop(leaderboardMusic_rose)
         love.audio.play(leaderboardMusic)
-        b, c, h = http.request("http://127.0.0.1/getData_jaune.php")
+        b, c, h = http.request("http://ver-infect.atspace.cc/getData_jaune.php")
       end
       
       
@@ -3547,8 +3569,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
     
     if key == "return" then
       
-      love.audio.play(select3)
-      
+    
       if SelectVirusP == "original" then 
       
         response_body = {}
@@ -3568,6 +3589,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
           sink = ltn12.sink.table(response_body)
       }
       table.foreach(response_body,print)
+      positionhorizontalClassement = 1
       
     elseif SelectVirusP == "originalV" then 
       
@@ -3589,6 +3611,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
         }
       table.foreach(response_body,print)
   
+  positionhorizontalClassement = 2
     elseif SelectVirusP == "rouge" then 
       
         response_body = {}
@@ -3608,7 +3631,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
           sink = ltn12.sink.table(response_body)
       }
       table.foreach(response_body,print)
-      
+      positionhorizontalClassement = 3
     elseif SelectVirusP == "rose" then 
       
         response_body = {}
@@ -3628,7 +3651,7 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
           sink = ltn12.sink.table(response_body)
       }
       table.foreach(response_body,print)
-      
+      positionhorizontalClassement = 4
     elseif SelectVirusP == "jaune" then 
       
         response_body = {}
@@ -3648,10 +3671,11 @@ if afficheMainMenu == true and afficheOptions == false and afficheSelectVirus ==
           sink = ltn12.sink.table(response_body)
       }
       table.foreach(response_body,print)
-    
+    positionhorizontalClassement = 5
   end
+    love.audio.play(puttime)
   
-    MainMenu()
+    Leaderboard()
     
     
     end
@@ -4007,6 +4031,7 @@ end
 
 function love.textinput(t)
     if afficheFin == true then
+    love.audio.play(input)
     pseudo = pseudo .. t
     end
 end
