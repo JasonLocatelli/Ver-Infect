@@ -5880,7 +5880,7 @@ function love.draw()
         
         love.graphics.print("[F1] FENETRE",60,30,0,5,5)
         love.graphics.print("[F2] PLEINE ECRAN",60,60,0,5,5)
-        love.graphics.print("VER-INFECT",menu.principal.x,menu.principal.y,0,5,5,30,5/2)
+        love.graphics.print("VER'INFECT",menu.principal.x,menu.principal.y,0,5,5,30,5/2)
         love.graphics.print("Jouer",  menu.play.x, menu.play.y,0,5,5,100/2,5/2)
         love.graphics.print("Options",  menu.options.x,  menu.options.y,0,5,5,100/2,5/2)
         love.graphics.print("Classement en ligne",  menu.leaderboard.x,  menu.leaderboard.y,0,5,5,100/2,5/2)
