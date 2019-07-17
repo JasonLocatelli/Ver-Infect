@@ -498,6 +498,10 @@ credits.specialThanks.name3 = {}
 credits.specialThanks.name3.x = 0
 credits.specialThanks.name3.y = 0
 
+credits.specialThanks.name4 = {}
+credits.specialThanks.name4.x = 0
+credits.specialThanks.name4.y = 0
+
 credits.specialThanksPlay = {}
 credits.specialThanksPlay.name = {}
 credits.specialThanksPlay.name.x = 0
@@ -1128,9 +1132,12 @@ function credit()
   
   credits.specialThanks.name3.x = 20
   credits.specialThanks.name3.y = 550
+  
+  credits.specialThanks.name4.x = 20
+  credits.specialThanks.name4.y = 560
     
   credits.specialThanksPlay.name.x = 20
-  credits.specialThanksPlay.name.y = 600
+  credits.specialThanksPlay.name.y = 610
     
 end
 
@@ -2453,6 +2460,7 @@ function love.update(dt)
       credits.specialThanks.name.y = credits.specialThanks.name.y - 30 * dt
       credits.specialThanks.name2.y = credits.specialThanks.name2.y - 30 * dt
       credits.specialThanks.name3.y = credits.specialThanks.name3.y - 30 * dt
+      credits.specialThanks.name4.y = credits.specialThanks.name4.y - 30 * dt
       credits.specialThanksPlay.name.y = credits.specialThanksPlay.name.y - 30 * dt
       
       if credits.specialThanksPlay.name.y < -10 then
@@ -5850,7 +5858,7 @@ function love.draw()
         love.graphics.print("Leaderboard offline",  menu.leaderboardOffline.x,  menu.leaderboardOffline.y,0,5,5,100/2,5/2)
         love.graphics.print("Quit",  menu.quit.x,  menu.quit.y,0,5,5,100/2,7/2)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y-15,0,5,5,100/2,5/2)
-        love.graphics.print("Version 1.20",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,5,5,100/2,5/2)
+        love.graphics.print("Version 1.20b",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,5,5,100/2,5/2)
 
       else
         love.graphics.print("[F1] WINDOW",30,500,0,4,4)
@@ -5862,7 +5870,7 @@ function love.draw()
         love.graphics.print("Leaderboard offline",  menu.leaderboardOffline.x,  menu.leaderboardOffline.y,0,4,4,100/2,5/2)
         love.graphics.print("Quit",  menu.quit.x,  menu.quit.y,0,4,4,100/2,7/2)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y-15,0,4,4,100/2,5/2)
-        love.graphics.print("Version 1.20",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,4,4,100/2,5/2)
+        love.graphics.print("Version 1.20b",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,4,4,100/2,5/2)
       end
 
     elseif language == "french" then
@@ -5879,7 +5887,7 @@ function love.draw()
         love.graphics.print("Classement local",  menu.leaderboardOffline.x,  menu.leaderboardOffline.y,0,5,5,100/2,5/2)
         love.graphics.print("Quitter",  menu.quit.x,  menu.quit.y,0,5,5,100/2,7/2)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y-15,0,5,5,100/2,5/2)
-        love.graphics.print("Version 1.20",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,5,5,100/2,5/2)
+        love.graphics.print("Version 1.20b",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,5,5,100/2,5/2)
       else
         love.graphics.print("[F1] FENETRE",30,500,0,4,4)
         love.graphics.print("[F2] PLEINE ECRAN",390,500,0,4,4)
@@ -5890,7 +5898,7 @@ function love.draw()
         love.graphics.print("Classement local",  menu.leaderboardOffline.x,  menu.leaderboardOffline.y,0,4,4,100/2,5/2)
         love.graphics.print("Quitter",  menu.quit.x,  menu.quit.y,0,4,4,100/2,7/2)
         love.graphics.draw(curseurmenu.sprite, curseurmenu.x, curseurmenu.y-15,0,4,4,100/2,5/2)
-        love.graphics.print("Version 1.20",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,4,4,100/2,5/2)
+        love.graphics.print("Version 1.20b",love.graphics.getWidth()/2,love.graphics.getHeight()/1.07,0,4,4,100/2,5/2)
       end
     end
 
@@ -5920,28 +5928,30 @@ function love.draw()
     love.graphics.print("Franck", credits.specialThanks.name.x,credits.specialThanks.name.y)
     love.graphics.print("thewrath", credits.specialThanks.name2.x,credits.specialThanks.name2.y)
     love.graphics.print("Jimmy Labodudev", credits.specialThanks.name3.x,credits.specialThanks.name3.y)
-    love.graphics.print("Thanks for playing !", credits.specialThanksPlay.name.x,credits.specialThanksPlay.name.y)
+    love.graphics.print("IceGeo", credits.specialThanks.name4.x,credits.specialThanks.name4.y)
+    love.graphics.print("THANKS FOR PLAYING !", credits.specialThanksPlay.name.x,credits.specialThanksPlay.name.y)
   elseif language == "french" then
     love.graphics.setColor(0,255,0)
     love.graphics.print("DEVELOPPEUR", credits.developer.x,credits.developer.y)
     love.graphics.setColor(255,255,255)
-    love.graphics.print("J.Skey", credits.developer.name.x,credits.developer.name.y)
+    love.graphics.print("JSkey", credits.developer.name.x,credits.developer.name.y)
     
     love.graphics.setColor(0,255,0)
     love.graphics.print("GRAPHIQUES", credits.designer.x,credits.designer.y)
     love.graphics.setColor(255,255,255)
-    love.graphics.print("J.Skey", credits.designer.name.x,credits.designer.name.y)
+    love.graphics.print("JSkey", credits.designer.name.x,credits.designer.name.y)
     love.graphics.setColor(0,255,0)
     love.graphics.print("MUSIQUES/BRUITAGES", credits.musics.x,credits.musics.y)
     love.graphics.setColor(255,255,255)
-    love.graphics.print("J.Skey", credits.musics.name.x,credits.musics.name.y)
+    love.graphics.print("JSkey", credits.musics.name.x,credits.musics.name.y)
     
     love.graphics.setColor(0,255,0)
-    love.graphics.print("REMERCIEMENTS SPECIAL", credits.specialThanks.x,credits.specialThanks.y)
+    love.graphics.print("REMERCIEMENTS SPÉCIAL", credits.specialThanks.x,credits.specialThanks.y)
     love.graphics.setColor(255,255,255)
     love.graphics.print("Franck", credits.specialThanks.name.x,credits.specialThanks.name.y)
     love.graphics.print("thewrath", credits.specialThanks.name2.x,credits.specialThanks.name2.y)
     love.graphics.print("Jimmy Labodudev", credits.specialThanks.name3.x,credits.specialThanks.name3.y)
+    love.graphics.print("IceGeo", credits.specialThanks.name4.x,credits.specialThanks.name4.y)
     love.graphics.print("MERCI D'AVOIR JOUÉ !", credits.specialThanksPlay.name.x,credits.specialThanksPlay.name.y)
   end
 end
